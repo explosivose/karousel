@@ -12,7 +12,7 @@ class Desktop {
         public readonly kwinDesktop: KwinDesktop,
         private readonly pinManager: PinManager,
         private readonly config: Desktop.Config,
-        private readonly getScreen: () => Output,
+        public readonly screen: Output,
         layoutConfig: LayoutConfig,
         focusPasser: FocusPassing.Passer,
     ) {
@@ -22,17 +22,17 @@ class Desktop {
         this.dirtyScroll = true;
         this.dirtyPins = true;
         this.grid = new Grid(this, layoutConfig, focusPasser);
-        this.clientArea = Desktop.getClientArea(this.getScreen(), kwinDesktop);
-        this.tilingArea = Desktop.getTilingArea(this.clientArea, kwinDesktop, pinManager, config);
+        this.clientArea = Desktop.getClientArea(this.screen, kwinDesktop);
+        this.tilingArea = Desktop.getTilingArea(this.clientArea, kwinDesktop, pinManager, this.screen, config);
     }
 
     private updateArea() {
-        const newClientArea = Desktop.getClientArea(this.getScreen(), this.kwinDesktop);
+        const newClientArea = Desktop.getClientArea(this.screen, this.kwinDesktop);
         if (rectEquals(newClientArea, this.clientArea) && !this.dirtyPins) {
             return;
         }
         this.clientArea = newClientArea;
-        this.tilingArea = Desktop.getTilingArea(newClientArea, this.kwinDesktop, this.pinManager, this.config);
+        this.tilingArea = Desktop.getTilingArea(newClientArea, this.kwinDesktop, this.pinManager, this.screen, this.config);
         this.dirty = true;
         this.dirtyScroll = true;
         this.dirtyPins = false;
@@ -44,8 +44,8 @@ class Desktop {
         return Workspace.clientArea(ClientAreaOption.PlacementArea, screen, kwinDesktop);
     }
 
-    private static getTilingArea(clientArea: QmlRect, kwinDesktop: KwinDesktop, pinManager: PinManager, config: Desktop.Config) {
-        const availableSpace = pinManager.getAvailableSpace(kwinDesktop, clientArea);
+    private static getTilingArea(clientArea: QmlRect, kwinDesktop: KwinDesktop, pinManager: PinManager, screen: Output, config: Desktop.Config) {
+        const availableSpace = pinManager.getAvailableSpace(kwinDesktop, clientArea, screen);
         const top = availableSpace.top + config.marginTop;
         const bottom = availableSpace.bottom - config.marginBottom;
         const left = availableSpace.left + config.marginLeft;

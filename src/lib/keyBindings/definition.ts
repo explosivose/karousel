@@ -220,12 +220,6 @@ function getKeyBindings(world: World, actions: Actions): KeyBinding[] {
             defaultKeySequence: "Meta+Alt+End",
             action: () => world.do(actions.gridScrollEnd),
         },
-        {
-            name: "screen-switch",
-            description: "Move Karousel grid to the current screen",
-            defaultKeySequence: "Meta+Ctrl+Return",
-            action: () => world.do(actions.screenSwitch),
-        },
     ];
 }
 

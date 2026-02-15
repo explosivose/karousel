@@ -97,11 +97,10 @@ class World {
     }
 
     private update() {
-        const currentDesktop = this.desktopManager.getCurrentDesktop();
-        if (currentDesktop !== undefined) {
-            currentDesktop.arrange();
-            this.moveCursorToFocus();
+        for (const desktop of this.desktopManager.getDesktopsOnCurrentDesktopAndActivity()) {
+            desktop.arrange();
         }
+        this.moveCursorToFocus();
     }
 
     private moveCursorToFocus() {

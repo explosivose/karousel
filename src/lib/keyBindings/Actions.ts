@@ -387,10 +387,6 @@ class Actions {
         grid.desktop.scrollToColumn(rightColumn, false);
     };
 
-    public readonly screenSwitch = (cm: ClientManager, dm: DesktopManager) => {
-        dm.selectScreen(Workspace.activeScreen);
-    };
-
     public readonly focus = (columnIndex: number, cm: ClientManager, dm: DesktopManager) => {
         const desktop = dm.getCurrentDesktop();
         if (desktop === undefined) {
@@ -430,7 +426,7 @@ class Actions {
         if (kwinDesktop === undefined) {
             return;
         }
-        const newDesktop = dm.getDesktopInCurrentActivity(kwinDesktop);
+        const newDesktop = dm.getDesktopInCurrentActivity(kwinDesktop, Workspace.activeScreen);
         if (newDesktop === undefined) {
             return;
         }
@@ -446,7 +442,7 @@ class Actions {
         if (kwinDesktop === undefined) {
             return;
         }
-        const newDesktop = dm.getDesktopInCurrentActivity(kwinDesktop);
+        const newDesktop = dm.getDesktopInCurrentActivity(kwinDesktop, Workspace.activeScreen);
         if (newDesktop === undefined) {
             return;
         }

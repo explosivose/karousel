@@ -85,6 +85,14 @@ namespace ClientState {
                 oldActivities = kwinClient.activities;
             });
 
+            manager.connect(kwinClient.outputChanged, () => {
+                world.do((clientManager, desktopManager) => {
+                    for (const desktop of desktopManager.getDesktops(kwinClient.activities, kwinClient.desktops)) {
+                        desktop.onPinsChanged();
+                    }
+                });
+            });
+
             return manager;
         }
     }

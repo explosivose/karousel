@@ -21,11 +21,14 @@ class Column {
         if (targetGrid === this.grid) {
             this.grid.moveColumn(this, leftColumn);
         } else {
+            const oldKwinDesktop = this.grid.desktop.kwinDesktop;
             this.grid.onColumnRemoved(this, this.isFocused() ? FocusPassing.Type.Immediate : FocusPassing.Type.None);
             this.grid = targetGrid;
             targetGrid.onColumnAdded(this, leftColumn);
-            for (const window of this.windows.iterator()) {
-                window.client.kwinClient.desktops = [targetGrid.desktop.kwinDesktop];
+            if (targetGrid.desktop.kwinDesktop !== oldKwinDesktop) {
+                for (const window of this.windows.iterator()) {
+                    window.client.kwinClient.desktops = [targetGrid.desktop.kwinDesktop];
+                }
             }
         }
     }

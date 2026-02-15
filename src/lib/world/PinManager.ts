@@ -13,11 +13,11 @@ class PinManager {
         this.pinnedClients.delete(kwinClient);
     }
 
-    public getAvailableSpace(kwinDesktop: KwinDesktop, screen: QmlRect) {
-        const baseLot = new PinManager.Lot(screen.top, screen.bottom, screen.left, screen.right);
+    public getAvailableSpace(kwinDesktop: KwinDesktop, clientArea: QmlRect, screen: Output) {
+        const baseLot = new PinManager.Lot(clientArea.top, clientArea.bottom, clientArea.left, clientArea.right);
         let lots = [baseLot];
         for (const client of this.pinnedClients) {
-            if (!Clients.isOnVirtualDesktop(client, kwinDesktop) || client.minimized) {
+            if (!Clients.isOnVirtualDesktop(client, kwinDesktop) || client.minimized || client.output !== screen) {
                 continue;
             }
 

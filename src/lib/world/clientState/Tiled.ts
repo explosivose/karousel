@@ -56,6 +56,16 @@ namespace ClientState {
                 });
             });
 
+            manager.connect(kwinClient.outputChanged, () => {
+                world.do((clientManager, desktopManager) => {
+                    const desktop = desktopManager.getDesktopForClient(kwinClient);
+                    if (desktop === undefined) {
+                        return;
+                    }
+                    Tiled.moveWindowToGrid(window, desktop.grid);
+                });
+            });
+
             manager.connect(kwinClient.minimizedChanged, () => {
                 console.assert(kwinClient.minimized);
                 world.do((clientManager, desktopManager) => {
