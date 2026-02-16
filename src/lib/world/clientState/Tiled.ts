@@ -57,6 +57,9 @@ namespace ClientState {
             });
 
             manager.connect(kwinClient.outputChanged, () => {
+                if (!kwinClient.move) {
+                    return; // only move to new grid during interactive moves
+                }
                 world.do((clientManager, desktopManager) => {
                     const desktop = desktopManager.getDesktopForClient(kwinClient);
                     if (desktop === undefined) {

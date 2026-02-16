@@ -211,11 +211,17 @@ class Column {
     }
 
     public arrange(x: number, visibleRange: Range, forceOpaque: boolean) {
+        const overlapsVisible = this.getRight() > visibleRange.getLeft() && this.getLeft() < visibleRange.getRight();
+
         if (this.grid.config.offScreenOpacity < 1.0 && !forceOpaque) {
             const opacity = Range.contains(visibleRange, this) ? 100 : this.grid.config.offScreenOpacity;
             for (const window of this.windows.iterator()) {
                 window.client.kwinClient.opacity = opacity;
             }
+        }
+
+        if (!overlapsVisible) {
+            return; // don't place off-screen windows on other monitors
         }
 
         if (this.stacked && this.windows.length() >= 2) {
